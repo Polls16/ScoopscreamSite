@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Вход в админ-панель | Scoopscream</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page admin-page">
+      <section class="simple-page-head">
+        <nav class="main-nav" aria-label="Главная навигация">
+          <div class="nav-group nav-left">
+            <a href="index.html">Главная</a>
+            <a href="about.html">О нас</a>
+            <a href="menu.html">Меню</a>
+          </div>
+          <div class="nav-group nav-right">
+            <a href="cart.html">Корзина</a>
+            <a href="account.html">Личный кабинет</a>
+          </div>
+        </nav>
+        <div class="awning" aria-hidden="true">
+          <div class="awning-line"></div>
+          <div class="awning-flags">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="shop-sign" aria-label="Scoopscream">
+          <div class="sign-board">
+            <img class="sign-plate" src="images/ChatGPT Image 27 апр. 2026 г., 23_19_23.png" alt="" />
+            <span class="brand">Scoopscream</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="admin-login" id="admin-login">
+        <form class="admin-card admin-login-card" id="admin-login-form" novalidate>
+          <h1>Вход в админ-панель</h1>
+          <label>E-mail администратора
+            <input name="adminLogin" type="email" placeholder="E-mail из Supabase Auth" required />
+          </label>
+          <label>Пароль
+            <input name="adminPassword" type="password" placeholder="Пароль" required />
+          </label>
+          <aside class="admin-credentials">
+            <strong>Доступ только для администратора</strong>
+          </aside>
+          <button type="submit">Войти</button>
+          <p class="builder-status" id="admin-login-status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <footer class="site-footer">
+        <div class="footer-about">
+          <div class="footer-logo" aria-label="Scoopscream">
+            <img class="sign-plate" src="images/ChatGPT Image 27 апр. 2026 г., 23_19_23.png" alt="" />
+            <span class="brand footer-brand">Scoopscream</span>
+          </div>
+          <p>Магазин «Scoopscream» работает в Геленджике с 2000г.<br />Вход в панель доступен только администраторам.</p>
+        </div>
+        <div>
+          <h2>Меню сайта</h2>
+          <ul class="footer-links">
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="about.html">О нас</a></li>
+            <li><a href="menu.html">Меню</a></li>
+            <li><a href="order.html">Собрать заказ</a></li>
+            <li><a href="cart.html">Корзина</a></li>
+            <li><a href="account.html">Личный кабинет</a></li>
+            <li><a href="admin-login.html">Админ-панель</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Контакты</h2>
+          <ul class="footer-links">
+            <li>Геленджик, ул. Ленина, 5</li>
+            <li>Зима: 09.00 – 21.00</li>
+            <li>Лето: 09.00 – 23.00</li>
+            <li><a href="tel:+79990000000">+7 999 000 00 00</a></li>
+            <li><a href="mailto:hello@scoopscream.ru">hello@scoopscream.ru</a></li>
+          </ul>
+        </div>
+      </footer>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js" defer></script>
+  </body>
+</html>

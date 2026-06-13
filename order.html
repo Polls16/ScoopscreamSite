@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Заказ | Scoopscream</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page order-page">
+      <section class="order-hero" id="home">
+        <nav class="main-nav" aria-label="Главная навигация">
+          <div class="nav-group nav-left">
+            <a href="index.html">Главная</a>
+            <a href="about.html">О нас</a>
+            <a href="menu.html">Меню</a>
+          </div>
+          <div class="nav-group nav-right">
+            <a href="cart.html">Корзина</a>
+            <a href="account.html">Личный кабинет</a>
+          </div>
+        </nav>
+
+        <div class="awning" aria-hidden="true">
+          <div class="awning-line"></div>
+          <div class="awning-flags">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+
+        <div class="shop-sign" aria-label="Scoopscream">
+          <div class="sign-legs" aria-hidden="true"><span></span><span></span></div>
+          <div class="sign-board">
+            <img class="sign-plate" src="images/ChatGPT Image 27 апр. 2026 г., 23_19_23.png" alt="" />
+            <span class="sign-spark"></span>
+            <span class="brand">Scoopscream</span>
+          </div>
+        </div>
+
+        <div class="order-hero-copy">
+          <div class="section-title">
+            <span class="spark spark-red"></span>
+            <h1>Заказ мороженого</h1>
+            <span class="spark spark-red"></span>
+          </div>
+          <p>Собери свой заказ с любыми предпочтениями и забери его в нашем кафе-мороженом!</p>
+        </div>
+        <div class="order-flow" aria-label="Этапы заказа">
+          <p><span>1</span>Собрать заказ</p>
+          <p><span>2</span>Оплатить</p>
+          <p><span>3</span>Получить заказ в кафе</p>
+        </div>
+      </section>
+
+      <section class="builder-section">
+        <div class="builder-divider"></div>
+        <div class="builder-heading">
+          <h2>1. Выбери основу</h2>
+          <p>Цена за 1 шарик — 150 рублей.</p>
+        </div>
+        <div class="scoop-grid selectable-grid" data-builder="scoops">
+          <article class="choice-card" data-name="Шоколад"><img src="images/shokolad sharik.png" alt="" /><h3>Шоколад</h3><div class="qty-control"><button type="button" data-action="minus">−</button><span>0</span><button type="button" data-action="plus">+</button></div></article>
+          <article class="choice-card" data-name="Ваниль"><img src="images/vanil sharik.png" alt="" /><h3>Ваниль</h3><div class="qty-control"><button type="button" data-action="minus">−</button><span>0</span><button type="button" data-action="plus">+</button></div></article>
+          <article class="choice-card" data-name="Клубника"><img src="images/klubnika sharik.png" alt="" /><h3>Клубника</h3><div class="qty-control"><button type="button" data-action="minus">−</button><span>0</span><button type="button" data-action="plus">+</button></div></article>
+          <article class="choice-card" data-name="Мята"><img src="images/myata sharik.png" alt="" /><h3>Мята</h3><div class="qty-control"><button type="button" data-action="minus">−</button><span>0</span><button type="button" data-action="plus">+</button></div></article>
+          <article class="choice-card" data-name="Орео"><img src="images/orero sharik.png" alt="" /><h3>Орео</h3><div class="qty-control"><button type="button" data-action="minus">−</button><span>0</span><button type="button" data-action="plus">+</button></div></article>
+          <article class="choice-card" data-name="Пекан"><img src="images/pekan sharik.png" alt="" /><h3>Пекан</h3><div class="qty-control"><button type="button" data-action="minus">−</button><span>0</span><button type="button" data-action="plus">+</button></div></article>
+          <article class="choice-card" data-name="Манго"><img src="images/mango sharik.png" alt="" /><h3>Манго</h3><div class="qty-control"><button type="button" data-action="minus">−</button><span>0</span><button type="button" data-action="plus">+</button></div></article>
+          <article class="choice-card" data-name="Облепиха"><img src="images/oblepiha sharik.png" alt="" /><h3>Облепиха</h3><div class="qty-control"><button type="button" data-action="minus">−</button><span>0</span><button type="button" data-action="plus">+</button></div></article>
+          <article class="choice-card" data-name="Нутелла"><img src="images/nutella sharik.png" alt="" /><h3>Нутелла</h3><div class="qty-control"><button type="button" data-action="minus">−</button><span>0</span><button type="button" data-action="plus">+</button></div></article>
+        </div>
+        <p class="builder-note">Выберите до 5 шариков. Сейчас выбрано: <strong id="scoop-total">0</strong>/5.</p>
+      </section>
+
+      <section class="builder-section">
+        <div class="builder-divider"></div>
+        <div class="builder-heading">
+          <h2>2. Выбери держатель</h2>
+        </div>
+        <div class="format-row selectable-grid" data-builder="holder">
+          <article class="choice-card holder-card" data-name="Рожок"><img src="images/format rozhok.png" alt="" /><h3>Рожок</h3></article>
+          <article class="choice-card holder-card" data-name="Пластмассовый держатель"><img src="images/format plastik.png" alt="" /><h3>Пластмассовый держатель</h3></article>
+          <article class="choice-card holder-card" data-name="Вафельный стаканчик"><img src="images/format vaflya.png" alt="" /><h3>Вафельный стаканчик</h3></article>
+        </div>
+        <p class="builder-note">Рожок, стаканчик или хрустящая вафельная чашка.</p>
+      </section>
+
+      <section class="builder-section">
+        <div class="builder-divider"></div>
+        <div class="builder-heading">
+          <h2>3. Выбери топинги <span>(необязательно)</span></h2>
+          <p>Цена любого топпинга — 80 рублей.</p>
+        </div>
+        <div class="topping-grid selectable-grid" data-builder="toppings">
+          <article class="choice-card topping-card" data-name="Шоколад"><img src="images/toping shokolad.png" alt="" /><h3>Шоколад</h3></article>
+          <article class="choice-card topping-card" data-name="Карамель"><img src="images/toping karamel.png" alt="" /><h3>Карамель</h3></article>
+          <article class="choice-card topping-card" data-name="Варенье"><img src="images/toping varenie.png" alt="" /><h3>Варенье</h3></article>
+          <article class="choice-card topping-card" data-name="Орехи"><img src="images/toping orehi.png" alt="" /><h3>Орехи</h3></article>
+          <article class="choice-card topping-card" data-name="Печенье"><img src="images/toping pechenie.png" alt="" /><h3>Печенье</h3></article>
+          <article class="choice-card topping-card" data-name="Шоколадная крошка"><img src="images/toping shokolad kroshka.png" alt="" /><h3>Шоколадная крошка</h3></article>
+          <article class="choice-card topping-card" data-name="M&M's"><img src="images/toping m&ms.png" alt="" /><h3>M&M's</h3></article>
+          <article class="choice-card topping-card" data-name="Кокосовая стружка"><img src="images/toping kokos struzh.png" alt="" /><h3>Кокосовая стружка</h3></article>
+        </div>
+        <p class="builder-note">Добавьте сладкие детали, если хочется сделать десерт ярче.</p>
+      </section>
+
+      <section class="order-submit">
+        <div class="button-with-stars">
+          <span class="small-star"></span>
+          <button type="button" id="add-position">Добавить позицию</button>
+          <span class="small-star"></span>
+        </div>
+        <p class="builder-status" id="builder-status" aria-live="polite"></p>
+        <div class="order-submit-text">
+          <p>Прежде чем оплатить заказ, необходимо зарегистрироваться в личном кабинете.</p>
+          <p>Вы можете добавить сразу несколько позиций в заказ, мы бережно соберем, чтобы вы смогли забрать все в удобное для вас время.</p>
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <div class="footer-about">
+          <div class="footer-logo" aria-label="Scoopscream">
+            <img class="sign-plate" src="images/ChatGPT Image 27 апр. 2026 г., 23_19_23.png" alt="" />
+            <span class="brand footer-brand">Scoopscream</span>
+          </div>
+          <p>
+            Магазин «Scoopscream» работает в Геленджике с 2000г.<br />
+            За это время мы зарекомендовали себя как одно из<br />
+            лучших и атмосферных мест отдыха на<br />
+            Черноморском побережье.
+          </p>
+        </div>
+        <div>
+          <h2>Меню сайта</h2>
+          <ul class="footer-links">
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="about.html">О нас</a></li>
+            <li><a href="menu.html">Меню</a></li>
+            <li><a href="order.html">Собрать заказ</a></li>
+            <li><a href="cart.html">Корзина</a></li>
+            <li><a href="account.html">Личный кабинет</a></li>
+            <li><a href="admin-login.html">Админ-панель</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Контакты</h2>
+          <ul class="footer-links">
+            <li>Геленджик, ул. Ленина, 5</li>
+            <li>Зима: 09.00 – 21.00</li>
+            <li>Лето: 09.00 – 23.00</li>
+            <li><a href="tel:+79990000000">+7 999 000 00 00</a></li>
+            <li><a href="mailto:hello@scoopscream.ru">hello@scoopscream.ru</a></li>
+          </ul>
+        </div>
+      </footer>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js" defer></script>
+  </body>
+</html>
