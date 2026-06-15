@@ -63,6 +63,16 @@
           <label>E-mail*:<input name="email" type="email" placeholder="E-mail" required /></label>
           <label>Телефон*:<input name="phone" type="tel" placeholder="+7 999 000 00 00" required /></label>
           <label>Пароль*:<input name="password" type="password" placeholder="Пароль" required /></label>
+          <label class="registration-consent">
+            <input name="personalDataConsent" type="checkbox" required />
+            <span>
+              Я ознакомлен(а) с
+              <a href="agreement.html#user-agreement" target="_blank" rel="noopener">Пользовательским соглашением</a>
+              и
+              <a href="agreement.html#personal-data-policy" target="_blank" rel="noopener">Политикой обработки персональных данных</a>
+              и даю согласие на обработку моих персональных данных в целях регистрации, предоставления доступа к личному кабинету и оформления заказов.
+            </span>
+          </label>
           <button type="submit">Зарегистрироваться</button>
           <button type="button" class="secondary-button" id="show-login">Войти в личный кабинет</button>
           <p class="builder-status" id="register-status"></p>

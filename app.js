@@ -1,23 +1,47 @@
-const SUPABASE_URL = "https://ygzblyvrbfhmnfljnvzg.supabase.co";
+const SUPABASE_DIRECT_URL = "https://ygzblyvrbfhmnfljnvzg.supabase.co";
+const SUPABASE_PROXY_PATH = "/supabase";
+const SUPABASE_REQUEST_TIMEOUT_MS = 8000;
 
 const SUPABASE_KEY =
 "sb_publishable_-DIyOJVD95lEBHuD88L8bw_NGenLhGO";
 
+const canUseSupabaseProxy =
+  window.location.protocol === "https:" &&
+  !["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
+
+const SUPABASE_URL = canUseSupabaseProxy
+  ? `${window.location.origin}${SUPABASE_PROXY_PATH}`
+  : SUPABASE_DIRECT_URL;
+
+const fetchWithTimeout = async (resource, options = {}) => {
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), SUPABASE_REQUEST_TIMEOUT_MS);
+  const externalSignal = options.signal;
+
+  if (externalSignal) {
+    if (externalSignal.aborted) {
+      controller.abort();
+    } else {
+      externalSignal.addEventListener("abort", () => controller.abort(), { once: true });
+    }
+  }
+
+  try {
+    return await fetch(resource, { ...options, signal: controller.signal });
+  } finally {
+    window.clearTimeout(timeoutId);
+  }
+};
+
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
-  SUPABASE_KEY
+  SUPABASE_KEY,
+  {
+    global: {
+      fetch: fetchWithTimeout,
+    },
+  }
 );
-
-async function testConnection() {
-  const { data, error } = await supabaseClient
-    .from("products")
-    .select("*");
-
-  console.log("Products:", data);
-  console.log("Error:", error);
-}
-
-testConnection();
 
 const defaultProducts = [
   { id: "vanil", name: "Ваниль", type: "Вкус", price: 150, image: "images/vanil.png", builderImage: "images/vanil sharik.png", sortOrder: 10 },
@@ -44,6 +68,7 @@ const defaultProducts = [
 
 const defaultById = new Map(defaultProducts.map((product) => [product.id, product]));
 const defaultByName = new Map(defaultProducts.map((product) => [product.name.toLowerCase(), product]));
+const PRODUCTS_STORAGE_KEY = "scoopscream-products-v1";
 let productCache = null;
 const activeSubscriptions = new Set();
 
@@ -86,29 +111,67 @@ const normalizeProduct = (row, index = 0) => {
   };
 };
 
+function readStoredProducts() {
+  try {
+    const raw = window.localStorage?.getItem(PRODUCTS_STORAGE_KEY);
+    if (!raw) return [];
+
+    const parsed = JSON.parse(raw);
+    const rows = Array.isArray(parsed?.products) ? parsed.products : [];
+    return rows
+      .map(normalizeProduct)
+      .sort((first, second) => first.sortOrder - second.sortOrder);
+  } catch (error) {
+    console.warn("Products cache read error:", error);
+    return [];
+  }
+}
+
+function saveStoredProducts(products) {
+  try {
+    window.localStorage?.setItem(
+      PRODUCTS_STORAGE_KEY,
+      JSON.stringify({
+        updatedAt: new Date().toISOString(),
+        products,
+      })
+    );
+  } catch (error) {
+    console.warn("Products cache save error:", error);
+  }
+}
+
 async function loadProducts(options = {}) {
   if (productCache && !options.force && !options.includeInactive) return productCache;
 
-  const { data, error } = await supabaseClient
-    .from("products")
-    .select("*");
+  try {
+    const { data, error } = await supabaseClient
+      .from("products")
+      .select("*");
 
-  if (error) {
+    if (error) throw error;
+
+    const products = (data || [])
+      .map(normalizeProduct)
+      .sort((first, second) => first.sortOrder - second.sortOrder);
+
+    saveStoredProducts(products);
+
+    if (options.includeInactive) return products;
+
+    productCache = products.filter((product) => product.isActive);
+
+    return productCache;
+  } catch (error) {
     console.error("Products load error:", error);
-    if (options.includeInactive) return defaultProducts;
-    productCache = defaultProducts;
+    const storedProducts = readStoredProducts();
+    const fallbackProducts = storedProducts.length ? storedProducts : defaultProducts;
+
+    if (options.includeInactive) return fallbackProducts;
+
+    productCache = fallbackProducts.filter((product) => product.isActive);
     return productCache;
   }
-
-  const products = (data || [])
-    .map(normalizeProduct)
-    .sort((first, second) => first.sortOrder - second.sortOrder);
-
-  if (options.includeInactive) return products;
-
-  productCache = products.filter((product) => product.isActive);
-
-  return productCache;
 }
 
 function productById(products, id) {
@@ -173,7 +236,9 @@ function queryParam(name) {
 async function getCurrentUser() {
   const { data, error } = await supabaseClient.auth.getUser();
   if (error) {
-    console.error("Auth user error:", error);
+    if (error.name !== "AuthSessionMissingError") {
+      console.error("Auth user error:", error);
+    }
     return null;
   }
   return data.user;
@@ -245,6 +310,16 @@ function subscribeToTable(table, callback, key = table) {
     .channel(`${key}-${Date.now()}`)
     .on("postgres_changes", { event: "*", schema: "public", table }, callback)
     .subscribe();
+}
+
+function registerServiceWorker() {
+  if (!("serviceWorker" in navigator) || window.location.protocol === "file:") return;
+
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("service-worker.js")
+      .catch((error) => console.warn("Service worker registration error:", error));
+  });
 }
 
 async function renderManagedMenu() {
@@ -933,7 +1008,14 @@ function initAccount() {
     registerStatus.textContent = "";
     if (!registerForm.checkValidity()) {
       registerForm.classList.add("was-validated");
-      registerStatus.textContent = "Заполните все обязательные поля.";
+      const consentField = registerForm.elements.personalDataConsent;
+      const hasEmptyRequiredFields = [...registerForm.elements]
+        .some((field) => field !== consentField && field.matches?.("input, select, textarea") && !field.checkValidity());
+      registerStatus.textContent = consentField?.validity.valueMissing
+        ? hasEmptyRequiredFields
+          ? "Заполните обязательные поля и подтвердите согласие с пользовательским соглашением и политикой обработки персональных данных."
+          : "Подтвердите согласие с пользовательским соглашением и политикой обработки персональных данных."
+        : "Заполните все обязательные поля.";
       return;
     }
 
@@ -943,6 +1025,8 @@ function initAccount() {
       email: registerForm.elements.email.value.trim(),
       phone: registerForm.elements.phone.value.trim(),
       password: registerForm.elements.password.value,
+      personalDataConsent: registerForm.elements.personalDataConsent.checked,
+      personalDataConsentAt: new Date().toISOString(),
     };
 
     const button = registerForm.querySelector('button[type="submit"]');
@@ -957,6 +1041,8 @@ function initAccount() {
           name: userData.name,
           surname: userData.surname,
           phone: userData.phone,
+          personalDataConsent: userData.personalDataConsent,
+          personalDataConsentAt: userData.personalDataConsentAt,
         },
       },
     });
@@ -1386,6 +1472,7 @@ async function initAdmin() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+  registerServiceWorker();
   await renderManagedMenu();
   await initOrderBuilder();
   await renderCart();
