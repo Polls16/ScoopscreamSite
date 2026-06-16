@@ -1224,16 +1224,18 @@ async function initAdmin() {
         .map((item) => `
           <article class="admin-row ${item.isActive ? "" : "is-inactive"}">
             <img src="${escapeHtml(item.image)}" alt="" />
-            <div>
+            <div class="admin-row-content">
               <h3>${escapeHtml(item.name)}</h3>
               <p>${escapeHtml(item.type)} · ${money(item.price)}</p>
               <p>Остаток: ${escapeHtml(item.quantity)} шт.</p>
               <p>Статус: ${item.isActive ? "активен" : "скрыт"}</p>
               <p>${escapeHtml(item.image)}</p>
             </div>
-            <button type="button" data-edit="${escapeHtml(item.id)}">Редактировать</button>
-            <button type="button" data-stock-plus="${escapeHtml(item.id)}">+10</button>
-            <button type="button" data-toggle-active="${escapeHtml(item.id)}">${item.isActive ? "Скрыть" : "Вернуть"}</button>
+            <div class="admin-row-actions">
+              <button type="button" data-edit="${escapeHtml(item.id)}">Редактировать</button>
+              <button type="button" data-stock-plus="${escapeHtml(item.id)}">+10</button>
+              <button type="button" data-toggle-active="${escapeHtml(item.id)}">${item.isActive ? "Скрыть" : "Вернуть"}</button>
+            </div>
           </article>
         `)
         .join("")
