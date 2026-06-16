@@ -106,6 +106,7 @@ const normalizeProduct = (row, index = 0) => {
     quantity: Number.isFinite(quantity) ? quantity : 0,
     image: String(row.image || row.image_url || row.photo || fallback.image || ""),
     builderImage: String(row.builder_image || row.builderImage || fallback.builderImage || row.image || fallback.image || ""),
+    description: String(row.description ?? fallback.description ?? ""),
     sortOrder: Number(row.sort_order ?? row.sortOrder ?? fallback.sortOrder ?? index),
     isActive: row.is_active !== false && row.active !== false,
   };
@@ -1159,15 +1160,20 @@ function initAdminLogin() {
   });
 }
 
-function adminProductPayload(form, editingProduct) {
+function adminProductPayload(form, editingProduct = {}) {
+  const formData = new FormData(form);
+  const imageUrl = formData.get("image")?.toString().trim() || "";
+
   return {
-    name: form.elements.namedItem("name").value.trim(),
-    type: form.elements.namedItem("type").value,
-    price: Number(form.elements.namedItem("price").value),
-    quantity: Number(form.elements.namedItem("quantity").value),
-    image: form.elements.namedItem("image").value.trim(),
-    sort_order: editingProduct?.sortOrder ?? Date.now(),
-    is_active: true,
+    name: formData.get("name")?.toString().trim() || "",
+    category: formData.get("type")?.toString().trim() || "Вкус",
+    price: Number(formData.get("price") || 0),
+    quantity: Number(formData.get("quantity") || 0),
+    image_url: imageUrl,
+    image: imageUrl,
+    description: editingProduct?.description || "",
+    is_active: editingProduct?.isActive ?? editingProduct?.is_active ?? true,
+    updated_at: new Date().toISOString(),
   };
 }
 
